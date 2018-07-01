@@ -140,6 +140,40 @@ class MainWindow(QMainWindow, WindowMixin):
         useDefaultLabelContainer = QWidget()
         useDefaultLabelContainer.setLayout(useDefaultLabelQHBoxLayout)
 
+        
+        # Create a widget for truncated button
+        self.truncButton = QCheckBox(u'truncated')
+        self.truncButton.setChecked(False)
+        #self.truncButton.stateChanged.connect(self.btnstate)
+        # Create a widget for non-human button
+        self.jingaiButton = QCheckBox(u'non-human')
+        self.jingaiButton.setChecked(False)
+        #self.jingaiButton.stateChanged.connect(self.btnstate)
+        # Create a widget for blur button
+        self.blurButton = QCheckBox(u'blur')
+        self.blurButton.setChecked(False)
+        #self.blurButton.stateChanged.connect(self.btnstate)
+        # Create a widget for atypical pose button
+        self.atypButton = QCheckBox(u'atypical pose')
+        self.atypButton.setChecked(False)
+        #self.atypButton.stateChanged.connect(self.btnstate)
+        self.occluLabel = QLabel('Occulusion')
+        self.occluButton0 = QRadioButton('0')
+        self.occluButton1 = QRadioButton('1')
+        self.occluButton2 = QRadioButton('2')
+        self.occluGroup = QButtonGroup()
+        self.occluGroup.addButton(self.occluButton0, 0)
+        self.occluGroup.addButton(self.occluButton1, 1)
+        self.occluGroup.addButton(self.occluButton2, 2)
+        self.occluLayout = QHBoxLayout()
+        self.occluLayout.addWidget(self.occluLabel)
+        self.occluLayout.addWidget(self.occluButton0)
+        self.occluLayout.addWidget(self.occluButton1)
+        self.occluLayout.addWidget(self.occluButton2)
+        self.occluButton0.setChecked(True)
+
+        # -occlusion level: none, partial, heavy
+        
         # Create a widget for edit and diffc button
         self.diffcButton = QCheckBox(u'difficult')
         self.diffcButton.setChecked(False)
@@ -150,6 +184,12 @@ class MainWindow(QMainWindow, WindowMixin):
         # Add some of widgets to listLayout
         listLayout.addWidget(self.editButton)
         listLayout.addWidget(self.diffcButton)
+        listLayout.addWidget(self.truncButton)
+        listLayout.addWidget(self.jingaiButton)
+        listLayout.addWidget(self.blurButton)
+        listLayout.addWidget(self.atypButton)
+        listLayout.addWidget(self.occluLabel)
+        listLayout.addLayout(self.occluLayout)
         listLayout.addWidget(useDefaultLabelContainer)
 
         # Create and add a widget for showing current label items
