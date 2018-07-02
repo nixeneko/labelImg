@@ -144,19 +144,25 @@ class MainWindow(QMainWindow, WindowMixin):
         # Create a widget for truncated button
         self.truncButton = QCheckBox(u'truncated')
         self.truncButton.setChecked(False)
-        #self.truncButton.stateChanged.connect(self.btnstate)
+        self.truncButton.stateChanged.connect(
+            lambda item=None: self.btnstate(item, btn=self.truncButton, prop="truncated"))
         # Create a widget for non-human button
         self.jingaiButton = QCheckBox(u'non-human')
         self.jingaiButton.setChecked(False)
-        #self.jingaiButton.stateChanged.connect(self.btnstate)
+        self.jingaiButton.stateChanged.connect(
+            lambda item=None: self.btnstate(item, btn=self.jingaiButton, prop="jingai"))
         # Create a widget for blur button
         self.blurButton = QCheckBox(u'blur')
         self.blurButton.setChecked(False)
-        #self.blurButton.stateChanged.connect(self.btnstate)
+        self.blurButton.stateChanged.connect(
+            lambda item=None: self.btnstate(item, btn=self.blurButton, prop="blur"))
         # Create a widget for atypical pose button
         self.atypButton = QCheckBox(u'atypical pose')
         self.atypButton.setChecked(False)
-        #self.atypButton.stateChanged.connect(self.btnstate)
+        self.atypButton.stateChanged.connect(
+            lambda item=None: self.btnstate(item, btn=self.atypButton, prop="atypical_pose"))
+        # Create a widget for occlusion button
+        # -occlusion level: none, partial, heavy
         self.occluLabel = QLabel('Occulusion')
         self.occluButton0 = QRadioButton('0')
         self.occluButton1 = QRadioButton('1')
@@ -172,12 +178,12 @@ class MainWindow(QMainWindow, WindowMixin):
         self.occluLayout.addWidget(self.occluButton2)
         self.occluButton0.setChecked(True)
 
-        # -occlusion level: none, partial, heavy
         
         # Create a widget for edit and diffc button
         self.diffcButton = QCheckBox(u'difficult')
         self.diffcButton.setChecked(False)
-        self.diffcButton.stateChanged.connect(self.btnstate)
+        self.diffcButton.stateChanged.connect(
+            lambda item=None: self.btnstate(item, btn=self.diffcButton, prop="difficult"))
         self.editButton = QToolButton()
         self.editButton.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
 
@@ -713,7 +719,7 @@ class MainWindow(QMainWindow, WindowMixin):
                 self.loadFile(filename)
 
     # Add chris
-    def btnstate(self, item= None):
+    def btnstate(self, item= None, btn="diffcButton", prop="difficult"):
         """ Function to handle difficult examples
         Update on each object """
         if not self.canvas.editing():
@@ -723,7 +729,9 @@ class MainWindow(QMainWindow, WindowMixin):
         if not item: # If not selected Item, take the first one
             item = self.labelList.item(self.labelList.count()-1)
 
-        difficult = self.diffcButton.isChecked()
+        if isinstance(btn, str):
+            btn=getattr(self, btn)
+        property = btn.isChecked()
 
         try:
             shape = self.itemsToShapes[item]
@@ -731,14 +739,16 @@ class MainWindow(QMainWindow, WindowMixin):
             pass
         # Checked and Update
         try:
-            if difficult != shape.difficult:
-                shape.difficult = difficult
+            if property != getattr(shape, prop):
+                setattr(shape, prop, property)
                 self.setDirty()
             else:  # User probably changed item visibility
                 self.canvas.setShapeVisible(shape, item.checkState() == Qt.Checked)
         except:
             pass
+            
 
+            
     # React to canvas signals.
     def shapeSelectionChanged(self, selected=False):
         if self._noSelectionSlot:
