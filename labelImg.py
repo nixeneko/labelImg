@@ -763,7 +763,7 @@ class MainWindow(QMainWindow, WindowMixin):
         occlusion = self.occluGroup.checkedId()
         if occlusion == -1:
             occlusion = 0
-        print(occlusion)
+
         try:
             shape = self.itemsToShapes[item]
         except:
@@ -851,7 +851,12 @@ class MainWindow(QMainWindow, WindowMixin):
                         fill_color=s.fill_color.getRgb(),
                         points=[(p.x(), p.y()) for p in s.points],
                        # add chris
-                        difficult = s.difficult)
+                        difficult = s.difficult,
+                        truncated = s.truncated,
+                        jingai = s.jingai,
+                        blur = s.blur,
+                        atypical_pose = s.atypical_pose,
+                        occlusion = s.occlusion)
 
         shapes = [format_shape(shape) for shape in self.canvas.shapes]
         # Can add differrent annotation formats here

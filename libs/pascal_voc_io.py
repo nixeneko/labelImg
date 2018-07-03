@@ -74,10 +74,16 @@ class PascalVocWriter:
         segmented.text = '0'
         return top
 
-    def addBndBox(self, xmin, ymin, xmax, ymax, name, difficult):
+    def addBndBox(self, xmin, ymin, xmax, ymax, name, 
+                    difficult, truncated, jingai, blur, atypical_pose, occlusion):
         bndbox = {'xmin': xmin, 'ymin': ymin, 'xmax': xmax, 'ymax': ymax}
         bndbox['name'] = name
         bndbox['difficult'] = difficult
+        bndbox['truncated'] = truncated
+        bndbox['jingai'] = jingai
+        bndbox['blur'] = blur
+        bndbox['atypical_pose'] = atypical_pose
+        bndbox['occlusion'] = occlusion
         self.boxlist.append(bndbox)
 
     def appendObjects(self, top):
@@ -89,8 +95,6 @@ class PascalVocWriter:
             except NameError:
                 # Py3: NameError: name 'unicode' is not defined
                 name.text = each_object['name']
-            pose = SubElement(object_item, 'pose')
-            pose.text = "Unspecified"
             truncated = SubElement(object_item, 'truncated')
             if int(each_object['ymax']) == int(self.imgSize[0]) or (int(each_object['ymin'])== 1):
                 truncated.text = "1" # max == height or min
@@ -100,6 +104,15 @@ class PascalVocWriter:
                 truncated.text = "0"
             difficult = SubElement(object_item, 'difficult')
             difficult.text = str( bool(each_object['difficult']) & 1 )
+            jingai = SubElement(object_item, 'jingai')
+            jingai.text = str( bool(each_object['difficult']) & 1 )
+            blur = SubElement(object_item, 'blur')
+            blur.text = str( bool(each_object['blur']) & 1 )
+            pose = SubElement(object_item, 'pose')
+            pose.text = str( bool(each_object['atypical_pose']) & 1 )
+            occlusion = SubElement(object_item, 'occlusion')
+            occlusion.text = str(each_object['atypical_pose'])
+            
             bndbox = SubElement(object_item, 'bndbox')
             xmin = SubElement(bndbox, 'xmin')
             xmin.text = str(each_object['xmin'])
