@@ -79,7 +79,6 @@ class PascalVocWriter:
         bndbox = {'xmin': xmin, 'ymin': ymin, 'xmax': xmax, 'ymax': ymax}
         bndbox['name'] = name
         bndbox['difficult'] = difficult
-        bndbox['truncated'] = truncated
         bndbox['jingai'] = jingai
         bndbox['blur'] = blur
         bndbox['atypical_pose'] = atypical_pose

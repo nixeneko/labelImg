@@ -188,7 +188,6 @@ class MainWindow(QMainWindow, WindowMixin):
         # Add some of widgets to listLayout
         listLayout.addWidget(self.editButton)
         listLayout.addWidget(self.diffcButton)
-        listLayout.addWidget(self.truncButton)
         listLayout.addWidget(self.jingaiButton)
         listLayout.addWidget(self.blurButton)
         listLayout.addWidget(self.atypButton)
