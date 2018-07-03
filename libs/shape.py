@@ -65,6 +65,22 @@ class Shape(object):
             # is used for drawing the pending line a different color.
             self.line_color = line_color
 
+    def gettext(self):
+        s = "face"
+        if self.difficult:
+            s += " diffc"
+        if self.jingai:
+            s += " non-human"
+        if self.blur:
+            s += " blur"
+        if self.atypical_pose:
+            s += " atyp"
+        if self.occlusion==1:
+            s += " occlu:1"
+        elif self.occlusion==2:
+            s += " occlu:2"
+        return s
+    
     def close(self):
         self._closed = True
 

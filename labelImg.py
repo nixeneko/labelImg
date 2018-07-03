@@ -747,6 +747,7 @@ class MainWindow(QMainWindow, WindowMixin):
                 shape.line_color = col
                 shape.fill_color = col
                 item.setBackground(col)
+                item.setText(shape.gettext())
             else:  # User probably changed item visibility
                 self.canvas.setShapeVisible(shape, item.checkState() == Qt.Checked)
         except:
@@ -780,6 +781,7 @@ class MainWindow(QMainWindow, WindowMixin):
                 shape.line_color = col
                 shape.fill_color = col
                 item.setBackground(col)
+                item.setText(shape.gettext())
             else:  # User probably changed item visibility
                 self.canvas.setShapeVisible(shape, item.checkState() == Qt.Checked)
         except:
@@ -803,7 +805,7 @@ class MainWindow(QMainWindow, WindowMixin):
 
     def addLabel(self, shape):
         shape.paintLabel = self.paintLabelsOption.isChecked()
-        item = HashableQListWidgetItem(shape.label)
+        item = HashableQListWidgetItem(shape.gettext())
         item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
         item.setCheckState(Qt.Checked)
         item.setBackground(generateColorByFlags(shape.difficult, shape.jingai, 
@@ -915,11 +917,12 @@ class MainWindow(QMainWindow, WindowMixin):
     def labelItemChanged(self, item):
         shape = self.itemsToShapes[item]
         label = item.text()
-        if label != shape.label:
-            shape.label = item.text()
-            shape.line_color = generateColorByFlags(shape.difficult, shape.jingai, 
-                                    shape.blur, shape.atypical_pose, shape.occlusion)
-            self.setDirty()
+        if label != shape.gettext():
+            #shape.label = item.text()
+            #shape.line_color = generateColorByFlags(shape.difficult, shape.jingai, 
+            #                        shape.blur, shape.atypical_pose, shape.occlusion)
+            #self.setDirty()
+            pass
         else:  # User probably changed item visibility
             self.canvas.setShapeVisible(shape, item.checkState() == Qt.Checked)
 
