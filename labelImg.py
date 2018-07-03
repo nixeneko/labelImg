@@ -141,11 +141,6 @@ class MainWindow(QMainWindow, WindowMixin):
         useDefaultLabelContainer.setLayout(useDefaultLabelQHBoxLayout)
 
         
-        # Create a widget for truncated button
-        self.truncButton = QCheckBox(u'truncated')
-        self.truncButton.setChecked(False)
-        self.truncButton.stateChanged.connect(
-            lambda item=None: self.btnstate(item, btn=self.truncButton, prop="truncated"))
         # Create a widget for non-human button
         self.jingaiButton = QCheckBox(u'non-human')
         self.jingaiButton.setChecked(False)
@@ -852,7 +847,6 @@ class MainWindow(QMainWindow, WindowMixin):
                         points=[(p.x(), p.y()) for p in s.points],
                        # add chris
                         difficult = s.difficult,
-                        truncated = s.truncated,
                         jingai = s.jingai,
                         blur = s.blur,
                         atypical_pose = s.atypical_pose,
@@ -894,7 +888,6 @@ class MainWindow(QMainWindow, WindowMixin):
             shape = self.itemsToShapes[item]
             # Add Chris
             self.diffcButton.setChecked(shape.difficult)
-            self.truncButton.setChecked(shape.truncated)
             self.jingaiButton.setChecked(shape.jingai)
             self.blurButton.setChecked(shape.blur)
             self.atypButton.setChecked(shape.atypical_pose)
