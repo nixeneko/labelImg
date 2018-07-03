@@ -153,13 +153,14 @@ class PascalVocReader:
     def getShapes(self):
         return self.shapes
 
-    def addShape(self, label, bndbox, difficult):
+    def addShape(self, label, bndbox, 
+                difficult, jingai, blur, atypical_pose, occlusion):
         xmin = int(bndbox.find('xmin').text)
         ymin = int(bndbox.find('ymin').text)
         xmax = int(bndbox.find('xmax').text)
         ymax = int(bndbox.find('ymax').text)
         points = [(xmin, ymin), (xmax, ymin), (xmax, ymax), (xmin, ymax)]
-        self.shapes.append((label, points, None, None, difficult))
+        self.shapes.append((label, points, None, None, difficult, jingai, blur, atypical_pose, occlusion))
 
     def parseXML(self):
         assert self.filepath.endswith(XML_EXT), "Unsupport file format"
@@ -180,5 +181,18 @@ class PascalVocReader:
             difficult = False
             if object_iter.find('difficult') is not None:
                 difficult = bool(int(object_iter.find('difficult').text))
-            self.addShape(label, bndbox, difficult)
+            jingai = False
+            if object_iter.find('jingai') is not None:
+                jingai = bool(int(object_iter.find('jingai').text))
+            blur = False
+            if object_iter.find('blur') is not None:
+                blur = bool(int(object_iter.find('blur').text))
+            atypical_pose = False
+            if object_iter.find('pose') is not None:
+                atypical_pose = bool(int(object_iter.find('pose').text))
+            occlusion = 0
+            if object_iter.find('occlusion') is not None:
+                occlusion = int(object_iter.find('occlusion').text)
+                
+            self.addShape(label, bndbox, difficult, jingai, blur, atypical_pose, occlusion)
         return True
