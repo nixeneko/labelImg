@@ -370,7 +370,8 @@ class MainWindow(QMainWindow, WindowMixin):
 
         # Lavel list context menu.
         labelMenu = QMenu()
-        addActions(labelMenu, (edit, delete))
+        #addActions(labelMenu, (edit, delete))
+        addActions(labelMenu, (delete,))
         self.labelList.setContextMenuPolicy(Qt.CustomContextMenu)
         self.labelList.customContextMenuRequested.connect(
             self.popLabelListMenu)
