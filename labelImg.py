@@ -171,6 +171,9 @@ class MainWindow(QMainWindow, WindowMixin):
         self.occluGroup.addButton(self.occluButton0, 0)
         self.occluGroup.addButton(self.occluButton1, 1)
         self.occluGroup.addButton(self.occluButton2, 2)
+        self.occluButton0.clicked.connect(self.occlubtnstate)
+        self.occluButton1.clicked.connect(self.occlubtnstate)
+        self.occluButton2.clicked.connect(self.occlubtnstate)
         self.occluLayout = QHBoxLayout()
         self.occluLayout.addWidget(self.occluLabel)
         self.occluLayout.addWidget(self.occluButton0)
@@ -747,8 +750,34 @@ class MainWindow(QMainWindow, WindowMixin):
         except:
             pass
             
+    def occlubtnstate(self, item=None):
+        """ Function to handle occlusion examples
+        Update on each object """
+        if not self.canvas.editing():
+            return
 
-            
+        item = self.currentItem()
+        if not item: # If not selected Item, take the first one
+            item = self.labelList.item(self.labelList.count()-1)
+
+        occlusion = self.occluGroup.checkedId()
+        if occlusion == -1:
+            occlusion = 0
+        print(occlusion)
+        try:
+            shape = self.itemsToShapes[item]
+        except:
+            pass
+        # Checked and Update
+        try:
+            if occlusion != shape.occlusion:
+                shape.occlusion = occlusion
+                self.setDirty()
+            else:  # User probably changed item visibility
+                self.canvas.setShapeVisible(shape, item.checkState() == Qt.Checked)
+        except:
+            pass
+        
     # React to canvas signals.
     def shapeSelectionChanged(self, selected=False):
         if self._noSelectionSlot:
@@ -864,6 +893,7 @@ class MainWindow(QMainWindow, WindowMixin):
             self.jingaiButton.setChecked(shape.jingai)
             self.blurButton.setChecked(shape.blur)
             self.atypButton.setChecked(shape.atypical_pose)
+            self.occluGroup.button(shape.occlusion).setChecked(True)
 
     def labelItemChanged(self, item):
         shape = self.itemsToShapes[item]
