@@ -29,7 +29,7 @@ except ImportError:
 import resources
 # Add internal libs
 from libs.constants import *
-from libs.lib import struct, newAction, newIcon, addActions, fmtShortcut, generateColorByText
+from libs.lib import struct, newAction, newIcon, addActions, fmtShortcut, generateColorByFlags
 from libs.settings import Settings
 from libs.shape import Shape, DEFAULT_LINE_COLOR, DEFAULT_FILL_COLOR
 from libs.canvas import Canvas
@@ -201,7 +201,7 @@ class MainWindow(QMainWindow, WindowMixin):
         labelListContainer.setLayout(listLayout)
         self.labelList.itemActivated.connect(self.labelSelectionChanged)
         self.labelList.itemSelectionChanged.connect(self.labelSelectionChanged)
-        self.labelList.itemDoubleClicked.connect(self.editLabel)
+        #self.labelList.itemDoubleClicked.connect(self.editLabel)
         # Connect to itemChanged to detect checkbox changes.
         self.labelList.itemChanged.connect(self.labelItemChanged)
         listLayout.addWidget(self.labelList)
@@ -706,7 +706,8 @@ class MainWindow(QMainWindow, WindowMixin):
         text = self.labelDialog.popUp(item.text())
         if text is not None:
             item.setText(text)
-            item.setBackground(generateColorByText(text))
+            #item.setBackground(generateColorByText(text))
+            item.setBackground(generateColorByFlags())
             self.setDirty()
 
     # Tzutalin 20160906 : Add file list and dock to move faster
@@ -741,6 +742,11 @@ class MainWindow(QMainWindow, WindowMixin):
             if property != getattr(shape, prop):
                 setattr(shape, prop, property)
                 self.setDirty()
+                col = generateColorByFlags(shape.difficult, shape.jingai, 
+                                        shape.blur, shape.atypical_pose, shape.occlusion)
+                shape.line_color = col
+                shape.fill_color = col
+                item.setBackground(col)
             else:  # User probably changed item visibility
                 self.canvas.setShapeVisible(shape, item.checkState() == Qt.Checked)
         except:
@@ -769,6 +775,11 @@ class MainWindow(QMainWindow, WindowMixin):
             if occlusion != shape.occlusion:
                 shape.occlusion = occlusion
                 self.setDirty()
+                col = generateColorByFlags(shape.difficult, shape.jingai, 
+                                        shape.blur, shape.atypical_pose, shape.occlusion)
+                shape.line_color = col
+                shape.fill_color = col
+                item.setBackground(col)
             else:  # User probably changed item visibility
                 self.canvas.setShapeVisible(shape, item.checkState() == Qt.Checked)
         except:
@@ -795,7 +806,8 @@ class MainWindow(QMainWindow, WindowMixin):
         item = HashableQListWidgetItem(shape.label)
         item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
         item.setCheckState(Qt.Checked)
-        item.setBackground(generateColorByText(shape.label))
+        item.setBackground(generateColorByFlags(shape.difficult, shape.jingai, 
+                                    shape.blur, shape.atypical_pose, shape.occlusion))
         self.itemsToShapes[item] = shape
         self.shapesToItems[shape] = item
         self.labelList.addItem(item)
@@ -828,12 +840,14 @@ class MainWindow(QMainWindow, WindowMixin):
             if line_color:
                 shape.line_color = QColor(*line_color)
             else:
-                shape.line_color = generateColorByText(label)
+                shape.line_color = generateColorByFlags(shape.difficult, shape.jingai, 
+                                            shape.blur, shape.atypical_pose, shape.occlusion)
 
             if fill_color:
                 shape.fill_color = QColor(*fill_color)
             else:
-                shape.fill_color = generateColorByText(label)
+                shape.fill_color = generateColorByFlags(shape.difficult, shape.jingai, 
+                                            shape.blur, shape.atypical_pose, shape.occlusion)
 
             self.addLabel(shape)
 
@@ -903,7 +917,8 @@ class MainWindow(QMainWindow, WindowMixin):
         label = item.text()
         if label != shape.label:
             shape.label = item.text()
-            shape.line_color = generateColorByText(shape.label)
+            shape.line_color = generateColorByFlags(shape.difficult, shape.jingai, 
+                                    shape.blur, shape.atypical_pose, shape.occlusion)
             self.setDirty()
         else:  # User probably changed item visibility
             self.canvas.setShapeVisible(shape, item.checkState() == Qt.Checked)
@@ -937,7 +952,7 @@ class MainWindow(QMainWindow, WindowMixin):
         self.occluButton0.setChecked(True)
         if text is not None:
             self.prevLabelText = text
-            generate_color = generateColorByText(text)
+            generate_color = generateColorByFlags()
             shape = self.canvas.setLastLabel(text, generate_color, generate_color)
             self.addLabel(shape)
             if self.beginner():  # Switch to edit mode.
