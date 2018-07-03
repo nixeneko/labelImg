@@ -860,6 +860,10 @@ class MainWindow(QMainWindow, WindowMixin):
             shape = self.itemsToShapes[item]
             # Add Chris
             self.diffcButton.setChecked(shape.difficult)
+            self.truncButton.setChecked(shape.truncated)
+            self.jingaiButton.setChecked(shape.jingai)
+            self.blurButton.setChecked(shape.blur)
+            self.atypButton.setChecked(shape.atypical_pose)
 
     def labelItemChanged(self, item):
         shape = self.itemsToShapes[item]
