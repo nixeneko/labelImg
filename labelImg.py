@@ -137,8 +137,8 @@ class MainWindow(QMainWindow, WindowMixin):
         useDefaultLabelQHBoxLayout = QHBoxLayout()
         useDefaultLabelQHBoxLayout.addWidget(self.useDefaultLabelCheckbox)
         useDefaultLabelQHBoxLayout.addWidget(self.defaultLabelTextLine)
-        useDefaultLabelContainer = QWidget()
-        useDefaultLabelContainer.setLayout(useDefaultLabelQHBoxLayout)
+        #useDefaultLabelContainer = QWidget()
+        #useDefaultLabelContainer.setLayout(useDefaultLabelQHBoxLayout)
 
         
         # Create a widget for non-human button
@@ -186,14 +186,14 @@ class MainWindow(QMainWindow, WindowMixin):
         self.editButton.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
 
         # Add some of widgets to listLayout
-        listLayout.addWidget(self.editButton)
+        #listLayout.addWidget(self.editButton)
         listLayout.addWidget(self.diffcButton)
         listLayout.addWidget(self.jingaiButton)
         listLayout.addWidget(self.blurButton)
         listLayout.addWidget(self.atypButton)
         listLayout.addWidget(self.occluLabel)
         listLayout.addLayout(self.occluLayout)
-        listLayout.addWidget(useDefaultLabelContainer)
+        #listLayout.addWidget(useDefaultLabelContainer)
 
         # Create and add a widget for showing current label items
         self.labelList = QListWidget()
@@ -386,7 +386,8 @@ class MainWindow(QMainWindow, WindowMixin):
                               fileMenuActions=(
                                   open, opendir, save, saveAs, close, resetAll, quit),
                               beginner=(), advanced=(),
-                              editMenu=(edit, copy, delete,
+                              #editMenu=(edit, copy, delete,
+                              editMenu=(copy, delete,
                                         None, color1),
                               beginnerContext=(create, edit, copy, delete),
                               advancedContext=(createMode, editMode, edit, copy,
@@ -912,22 +913,27 @@ class MainWindow(QMainWindow, WindowMixin):
 
         position MUST be in global coordinates.
         """
-        if not self.useDefaultLabelCheckbox.isChecked() or not self.defaultLabelTextLine.text():
-            if len(self.labelHist) > 0:
-                self.labelDialog = LabelDialog(
-                    parent=self, listItem=self.labelHist)
+        # if not self.useDefaultLabelCheckbox.isChecked() or not self.defaultLabelTextLine.text():
+            # if len(self.labelHist) > 0:
+                # self.labelDialog = LabelDialog(
+                    # parent=self, listItem=self.labelHist)
 
-            # Sync single class mode from PR#106
-            if self.singleClassMode.isChecked() and self.lastLabel:
-                text = self.lastLabel
-            else:
-                text = self.labelDialog.popUp(text=self.prevLabelText)
-                self.lastLabel = text
-        else:
-            text = self.defaultLabelTextLine.text()
+            # # Sync single class mode from PR#106
+            # if self.singleClassMode.isChecked() and self.lastLabel:
+                # text = self.lastLabel
+            # else:
+                # text = self.labelDialog.popUp(text=self.prevLabelText)
+                # self.lastLabel = text
+        # else:
+            # text = self.defaultLabelTextLine.text()
+        text = "face"
 
         # Add Chris
         self.diffcButton.setChecked(False)
+        self.jingaiButton.setChecked(False)
+        self.blurButton.setChecked(False)
+        self.atypButton.setChecked(False)
+        self.occluButton0.setChecked(True)
         if text is not None:
             self.prevLabelText = text
             generate_color = generateColorByText(text)
