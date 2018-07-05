@@ -106,7 +106,7 @@ class PascalVocWriter:
             difficult = SubElement(object_item, 'difficult')
             difficult.text = str( bool(each_object['difficult']) & 1 )
             jingai = SubElement(object_item, 'jingai')
-            jingai.text = str( bool(each_object['difficult']) & 1 )
+            jingai.text = str( bool(each_object['jingai']) & 1 )
             blur = SubElement(object_item, 'blur')
             blur.text = str( bool(each_object['blur']) & 1 )
             pose = SubElement(object_item, 'pose')
