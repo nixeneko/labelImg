@@ -150,11 +150,6 @@ class MainWindow(QMainWindow, WindowMixin):
         self.jingaiButton.setChecked(False)
         self.jingaiButton.stateChanged.connect(
             lambda item=None: self.btnstate(item, btn=self.jingaiButton, prop="jingai"))
-        # Create a widget for blur button
-        self.blurButton = QCheckBox(u'blur')
-        self.blurButton.setChecked(False)
-        self.blurButton.stateChanged.connect(
-            lambda item=None: self.btnstate(item, btn=self.blurButton, prop="blur"))
         # Create a widget for atypical pose button
         self.atypButton = QCheckBox(u'atypical pose')
         self.atypButton.setChecked(False)
@@ -194,7 +189,6 @@ class MainWindow(QMainWindow, WindowMixin):
         listLayout.addWidget(self.diffcButton)
         listLayout.addWidget(self.truncButton)
         listLayout.addWidget(self.jingaiButton)
-        listLayout.addWidget(self.blurButton)
         listLayout.addWidget(self.atypButton)
         listLayout.addWidget(self.occluLabel)
         listLayout.addLayout(self.occluLayout)
@@ -747,8 +741,8 @@ class MainWindow(QMainWindow, WindowMixin):
             if property != getattr(shape, prop):
                 setattr(shape, prop, property)
                 self.setDirty()
-                col = generateColorByFlags(shape.difficult, shape.truncated, shape.jingai, 
-                                        shape.blur, shape.atypical_pose, shape.occlusion)
+                col = generateColorByFlags(shape.difficult, shape.truncated, shape.jingai,
+                                            shape.atypical_pose, shape.occlusion)
                 shape.line_color = col
                 shape.fill_color = col
                 item.setBackground(col)
@@ -782,7 +776,7 @@ class MainWindow(QMainWindow, WindowMixin):
                 shape.occlusion = occlusion
                 self.setDirty()
                 col = generateColorByFlags(shape.difficult, shape.truncated, shape.jingai, 
-                                        shape.blur, shape.atypical_pose, shape.occlusion)
+                                           shape.atypical_pose, shape.occlusion)
                 shape.line_color = col
                 shape.fill_color = col
                 item.setBackground(col)
@@ -814,7 +808,7 @@ class MainWindow(QMainWindow, WindowMixin):
         item.setFlags(item.flags() | Qt.ItemIsUserCheckable)
         item.setCheckState(Qt.Checked)
         item.setBackground(generateColorByFlags(shape.difficult, shape.truncated, shape.jingai, 
-                                    shape.blur, shape.atypical_pose, shape.occlusion))
+                                                shape.atypical_pose, shape.occlusion))
         self.itemsToShapes[item] = shape
         self.shapesToItems[shape] = item
         self.labelList.addItem(item)
@@ -832,14 +826,13 @@ class MainWindow(QMainWindow, WindowMixin):
 
     def loadLabels(self, shapes):
         s = []
-        for label, points, line_color, fill_color, difficult, truncated, jingai, blur, atypical_pose, occlusion in shapes:
+        for label, points, line_color, fill_color, difficult, truncated, jingai, atypical_pose, occlusion in shapes:
             shape = Shape(label=label)
             for x, y in points:
                 shape.addPoint(QPointF(x, y))
             shape.difficult = difficult
             shape.truncated = truncated
             shape.jingai = jingai
-            shape.blur = blur
             shape.atypical_pose = atypical_pose
             shape.occlusion = occlusion
             shape.close()
@@ -849,13 +842,13 @@ class MainWindow(QMainWindow, WindowMixin):
                 shape.line_color = QColor(*line_color)
             else:
                 shape.line_color = generateColorByFlags(shape.difficult, shape.truncated, shape.jingai, 
-                                            shape.blur, shape.atypical_pose, shape.occlusion)
+                                                        shape.atypical_pose, shape.occlusion)
 
             if fill_color:
                 shape.fill_color = QColor(*fill_color)
             else:
                 shape.fill_color = generateColorByFlags(shape.difficult, shape.truncated, shape.jingai, 
-                                            shape.blur, shape.atypical_pose, shape.occlusion)
+                                                        shape.atypical_pose, shape.occlusion)
 
             self.addLabel(shape)
 
@@ -876,7 +869,6 @@ class MainWindow(QMainWindow, WindowMixin):
                         difficult = s.difficult,
                         truncated = s.truncated,
                         jingai = s.jingai,
-                        blur = s.blur,
                         atypical_pose = s.atypical_pose,
                         occlusion = s.occlusion)
 
@@ -918,7 +910,6 @@ class MainWindow(QMainWindow, WindowMixin):
             self.diffcButton.setChecked(shape.difficult)
             self.truncButton.setChecked(shape.truncated)
             self.jingaiButton.setChecked(shape.jingai)
-            self.blurButton.setChecked(shape.blur)
             self.atypButton.setChecked(shape.atypical_pose)
             self.occluGroup.button(shape.occlusion).setChecked(True)
 
@@ -959,7 +950,6 @@ class MainWindow(QMainWindow, WindowMixin):
         self.diffcButton.setChecked(False)
         self.truncButton.setChecked(False)
         self.jingaiButton.setChecked(False)
-        self.blurButton.setChecked(False)
         self.atypButton.setChecked(False)
         self.occluButton0.setChecked(True)
         if text is not None:

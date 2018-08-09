@@ -38,7 +38,7 @@ class Shape(object):
     scale = 1.0
 
     def __init__(self, label=None, line_color=None, difficult=False, paintLabel=False,
-                truncated=False, jingai=False, blur=False, atypical_pose=False, occlusion=0):
+                truncated=False, jingai=False, atypical_pose=False, occlusion=0):
         self.label = label
         self.points = []
         self.fill = False
@@ -47,7 +47,6 @@ class Shape(object):
         self.paintLabel = paintLabel
         self.truncated = truncated
         self.jingai = jingai #non-human flag
-        self.blur = blur
         self.atypical_pose = atypical_pose
         self.occlusion = occlusion
 
@@ -74,8 +73,6 @@ class Shape(object):
             s += " trunc"
         if self.jingai:
             s += " non-human"
-        if self.blur:
-            s += " blur"
         if self.atypical_pose:
             s += " atyp"
         if self.occlusion==1:

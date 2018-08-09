@@ -73,7 +73,7 @@ def fmtShortcut(text):
     mod, key = text.split('+', 1)
     return '<b>%s</b>+<b>%s</b>' % (mod, key)
 
-def generateColorByFlags(difficult=False, truncated=False, jingai=False, blur=False, atypical_pose=False, occlusion=0):
+def generateColorByFlags(difficult=False, truncated=False, jingai=False, atypical_pose=False, occlusion=0):
     if jingai: #purple
         col = (128, 0, 255)
     elif occlusion==1: #blue
@@ -82,8 +82,8 @@ def generateColorByFlags(difficult=False, truncated=False, jingai=False, blur=Fa
         col = (255, 0, 0)
     elif atypical_pose: #magenta
         col = (255, 0, 255)
-    elif blur: #cyan
-        col = (0, 255, 255)
+    # elif blur: #cyan
+        # col = (0, 255, 255)
     elif difficult: #yellow
         col = (255, 255, 0)
     elif truncated: #orange
